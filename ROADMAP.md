@@ -13,13 +13,13 @@ We're building ONE architecture (ingestion → features → model → explainabi
 
 ---
 
-## Phase 0 — Setup & Scoping
-- [ ] Create folder structure (done if you're reading this in the repo)
-- [ ] Set up Python virtual environment
-- [ ] Install base requirements (`requirements.txt`)
+## Phase 0 — Setup & Scoping ✅ COMPLETE
+- [x] Create folder structure
+- [x] Set up Python virtual environment
+- [x] Install base requirements (`requirements.txt`)
 - [x] Pick the target region for the flood module → Bangladesh
-- [ ] Set up GitHub repo `disaster-intel-platform` + push initial skeleton
-- [ ] Pick a real brand name whenever inspiration strikes (doesn't block any code work)
+- [x] Set up GitHub repo `disaster-intel-platform` + push initial skeleton (github.com/ArinolaDev/disaster-intel-platform)
+- [ ] Pick a real brand name whenever inspiration strikes (doesn't block any code work — parked)
 
 ## Phase 1 — Flood Module: Data Ingestion
 - [ ] `ingestion/weather.py` — pull historical + forecast rainfall from Open-Meteo API
