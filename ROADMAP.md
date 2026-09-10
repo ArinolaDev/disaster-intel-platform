@@ -22,10 +22,10 @@ We're building ONE architecture (ingestion → features → model → explainabi
 - [ ] Pick a real brand name whenever inspiration strikes (doesn't block any code work — parked)
 
 ## Phase 1 — Flood Module: Data Ingestion
-- [ ] `ingestion/weather.py` — pull historical + forecast rainfall from Open-Meteo API
+- [x] `ingestion/weather.py` — pull historical + forecast rainfall from Open-Meteo API (6 Bangladesh locations, 731 days historical + 168h forecast each — confirmed working)
 - [ ] `ingestion/historical.py` — pull past flood events (EM-DAT / ReliefWeb / DFO Global Flood Database) for our region — this becomes our labels
 - [ ] `ingestion/satellite.py` — (stretch) Sentinel Hub or NASA FIRMS pull for the region
-- [ ] Store raw pulls in `data/raw/flood/` as-is (never overwrite raw data)
+- [x] Store raw pulls in `data/raw/flood/` as-is (never overwrite raw data)
 - [ ] Write a data availability report — what date range, what resolution, what gaps
 
 ## Phase 2 — Geospatial Grid & Features
