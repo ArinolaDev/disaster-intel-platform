@@ -1,0 +1,33 @@
+# --- Core data handling ---
+pandas
+numpy
+
+# --- HTTP / API calls for data ingestion ---
+requests
+python-dotenv
+
+# --- Geospatial ---
+geopandas
+shapely
+h3
+rasterio
+
+# --- Modeling ---
+scikit-learn
+xgboost
+lightgbm
+shap
+
+# --- Notebooks / EDA ---
+jupyter
+matplotlib
+seaborn
+
+# --- API layer (Phase 5) ---
+fastapi
+uvicorn[standard]
+pydantic
+
+# --- Utilities ---
+tqdm
+loguru

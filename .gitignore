@@ -1,0 +1,37 @@
+# --- Python ---
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# --- Environment / secrets ---
+.env
+*.env
+
+# --- Data (raw/processed data can get huge — don't commit it) ---
+data/raw/
+data/processed/
+data/external/
+
+# --- Model artifacts (can be large binary files) ---
+models_artifacts/*.pkl
+models_artifacts/*.joblib
+models_artifacts/*.h5
+models_artifacts/**/*.pkl
+models_artifacts/**/*.joblib
+
+# --- Frontend ---
+frontend/node_modules/
+frontend/.next/
+frontend/dist/
+frontend/build/
+
+# --- OS / editor junk ---
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# --- Jupyter ---
+.ipynb_checkpoints
