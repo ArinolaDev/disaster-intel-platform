@@ -11,6 +11,7 @@ geopandas
 shapely
 h3
 rasterio
+earthengine-api
 
 # --- Modeling ---
 scikit-learn
