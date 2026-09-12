@@ -1,4 +1,12 @@
+"""
+src/ingestion/weather.py
 
+Pulls historical + forecast rainfall data for known flood-prone locations
+in Bangladesh from the Open-Meteo API (free, no API key required).
+
+Phase 1 scope: a handful of hardcoded points to prove the pipeline works.
+Phase 2 will replace POINTS with a full geospatial grid over the region.
+"""
 
 import requests
 import pandas as pd
@@ -62,18 +70,24 @@ def fetch_forecast(lat: float, lon: float, days: int = 7) -> pd.DataFrame:
     return df
 
 
-def pull_all_points(start_date: str, end_date: str):
-    """Pull historical + forecast data for every point in POINTS and save to CSV."""
+def pull_all_points(start_date: str, end_date: str, file_prefix: str = "historical"):
+    """Pull historical rainfall for every point in POINTS and save to CSV."""
     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     for name, coords in POINTS.items():
-        print(f"Fetching historical rainfall for {name}...")
+        print(f"Fetching {file_prefix} rainfall for {name} ({start_date} to {end_date})...")
         hist_df = fetch_historical(coords["lat"], coords["lon"], start_date, end_date)
         hist_df["location"] = name
-        hist_path = RAW_DATA_DIR / f"historical_{name.lower()}.csv"
+        hist_path = RAW_DATA_DIR / f"{file_prefix}_{name.lower()}.csv"
         hist_df.to_csv(hist_path, index=False)
         print(f"  -> saved {len(hist_df)} rows to {hist_path}")
 
+
+def pull_forecasts():
+    """Pull current 7-day forecast for every point in POINTS and save to CSV."""
+    RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    for name, coords in POINTS.items():
         print(f"Fetching forecast rainfall for {name}...")
         fcst_df = fetch_forecast(coords["lat"], coords["lon"])
         fcst_df["location"] = name
@@ -83,11 +97,16 @@ def pull_all_points(start_date: str, end_date: str):
 
 
 if __name__ == "__main__":
-    # Pull the last 2 years of historical data + current forecast.
-    # Open-Meteo's archive has a short delay, so we stop a few days before today.
+    print("Pulling TRAINING-RANGE rainfall (2000-2018, matches flood event labels)...")
+    pull_all_points(start_date="2000-01-01", end_date="2018-12-31", file_prefix="training")
+
+    print("\nPulling RECENT rainfall (last 2 years, for live prediction later)...")
     today = date.today()
     end = today - timedelta(days=5)
     start = end - timedelta(days=730)
+    pull_all_points(start_date=start.isoformat(), end_date=end.isoformat(), file_prefix="historical")
 
-    pull_all_points(start_date=start.isoformat(), end_date=end.isoformat())
+    print("\nPulling current 7-day forecast...")
+    pull_forecasts()
+
     print("\nDone. Check data/raw/flood/ for output CSVs.")
