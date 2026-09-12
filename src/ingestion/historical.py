@@ -23,21 +23,27 @@ def get_flood_events_for_point(lat: float, lon: float, name: str) -> pd.DataFram
     point = ee.Geometry.Point([lon, lat])
     region = point.buffer(BUFFER_METERS)
 
-    collection = ee.ImageCollection(GFD_COLLECTION)
+    collection = ee.ImageCollection(GFD_COLLECTION).filterBounds(region)
 
     def check_flood(image):
-        flooded_band = image.select("flooded")
-        stats = flooded_band.reduceRegion(
+        flooded_img = ee.Image(image).select(["flooded"])
+        sample = flooded_img.reduceRegion(
             reducer=ee.Reducer.max(),
             geometry=region,
             scale=250,
             maxPixels=1e9,
+            bestEffort=True,
+            tileScale=4,
         )
-        was_flooded = ee.Number(stats.get("flooded")).gt(0)
-        return image.set("was_flooded_here", was_flooded)
+        flooded_val = ee.Algorithms.If(
+            sample.contains("flooded"),
+            sample.get("flooded"),
+            0,
+        )
+        return image.set("was_flooded_here", flooded_val)
 
     tagged = collection.map(check_flood)
-    flooded_here = tagged.filter(ee.Filter.eq("was_flooded_here", 1))
+    flooded_here = tagged.filter(ee.Filter.gt("was_flooded_here", 0))
 
     event_list = flooded_here.toList(flooded_here.size())
     n_events = event_list.size().getInfo()
@@ -45,15 +51,14 @@ def get_flood_events_for_point(lat: float, lon: float, name: str) -> pd.DataFram
     rows = []
     for i in range(n_events):
         img = ee.Image(event_list.get(i))
-        info = img.toDictionary().getInfo()
         rows.append({
             "location": name,
             "system_index": img.get("system:index").getInfo(),
             "start_time": pd.to_datetime(img.get("system:time_start").getInfo(), unit="ms"),
             "end_time": pd.to_datetime(img.get("system:time_end").getInfo(), unit="ms"),
-            "dfo_country": info.get("cc"),
-            "dfo_severity": info.get("dfo_severity"),
-            "dfo_main_cause": info.get("dfo_main_cause"),
+            "dfo_country": img.get("cc").getInfo(),
+            "dfo_severity": img.get("dfo_severity").getInfo(),
+            "dfo_main_cause": img.get("dfo_main_cause").getInfo(),
         })
 
     return pd.DataFrame(rows)
