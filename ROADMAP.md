@@ -21,9 +21,9 @@ We're building ONE architecture (ingestion → features → model → explainabi
 - [x] Set up GitHub repo `disaster-intel-platform` + push initial skeleton (github.com/ArinolaDev/disaster-intel-platform)
 - [ ] Pick a real brand name whenever inspiration strikes (doesn't block any code work — parked)
 
-## Phase 1 — Flood Module: Data Ingestion
+## Phase 1 — Flood Module: Data Ingestion ✅ COMPLETE
 - [x] `ingestion/weather.py` — pull historical + forecast rainfall from Open-Meteo API (6 Bangladesh locations, 731 days historical + 168h forecast each — confirmed working)
-- [ ] `ingestion/historical.py` — pull past flood events from Google Earth Engine's Global Flood Database (GLOBAL_FLOOD_DB/MODIS_EVENTS/V1 — 913 real satellite-mapped flood events, 2000-2018, free with Google account) — this becomes our labels
+- [x] `ingestion/historical.py` — pull past flood events from Google Earth Engine Global Flood Database (208 real satellite-verified events across 6 locations, 2000-2018 — confirmed working)
 - [x] Google Earth Engine account registered (Community tier, noncommercial, project: disaster-intel-platform, no billing required)
 - [ ] `ingestion/satellite.py` — (stretch) Sentinel Hub or NASA FIRMS pull for the region
 - [x] Store raw pulls in `data/raw/flood/` as-is (never overwrite raw data)
